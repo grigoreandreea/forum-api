@@ -32,6 +32,13 @@ public class User {
         this.cityId = cityId;
     }
 
+    public User(int id, String username, int countryId, int cityId) {
+        this.id = id;
+        this.username = username;
+        this.countryId = countryId;
+        this.cityId = cityId;
+    }
+
     public int getId() {
         return id;
     }

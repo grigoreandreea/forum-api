@@ -17,6 +17,12 @@ public class UserRequest {
         this.cityId = cityId;
     }
 
+    public UserRequest(String username, int countryId, int cityId) {
+        this.username = username;
+        this.countryId = countryId;
+        this.cityId = cityId;
+    }
+
     public String getUsername() {
         return username;
     }

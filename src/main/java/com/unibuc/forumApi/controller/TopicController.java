@@ -49,7 +49,6 @@ public class TopicController {
     @PostMapping
     public ResponseEntity<Topic> createTopic(@RequestBody TopicRequest topicRequest) {
         Topic mappedTopic = topicMapper.topicRequestToTopic(topicRequest);
-        System.out.println(mappedTopic.toString());
         Topic savedTopic = topicService.create(mappedTopic);
         return ResponseEntity.created(URI.create("/topics/" + savedTopic.getId()))
                 .body(savedTopic);
@@ -59,7 +58,7 @@ public class TopicController {
     public ResponseEntity<Topic> updateTopic(@PathVariable int id, @RequestBody TopicRequest topicRequest) {
         Topic mappedTopic = topicMapper.topicRequestToTopic(topicRequest);
         mappedTopic.setId(id);
-        Topic savedTopic = topicService.update(mappedTopic);
+        Topic savedTopic = topicService.create(mappedTopic);
         return ResponseEntity.created(URI.create("/topics/" + savedTopic.getId()))
                 .body(savedTopic);
     }

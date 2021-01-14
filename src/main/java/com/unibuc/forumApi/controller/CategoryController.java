@@ -14,6 +14,7 @@ import com.unibuc.forumApi.model.Category;
 import com.unibuc.forumApi.service.CategoryService;
 import com.unibuc.forumApi.service.CommentService;
 import com.unibuc.forumApi.service.TopicService;
+import io.swagger.annotations.Api;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,28 +24,24 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/categories")
+@Api(value = "/categories",
+        tags = "Categories")
 public class CategoryController {
     private final CategoryService categoryService;
     private final CategoryMapper categoryMapper;
     private final TopicService topicService;
     private final TopicMapper topicMapper;
-    private final CommentMapper commentMapper;
-    private final CommentService commentService;
 
     public CategoryController(
             CategoryService categoryService, 
             CategoryMapper categoryMapper, 
             TopicService topicService, 
-            TopicMapper topicMapper, 
-            CommentMapper commentMapper, 
-            CommentService commentService
+            TopicMapper topicMapper
     ) {
         this.categoryService = categoryService;
         this.categoryMapper = categoryMapper;
         this.topicService = topicService;
         this.topicMapper = topicMapper;
-        this.commentMapper = commentMapper;
-        this.commentService = commentService;
     }
 
     @GetMapping
@@ -68,8 +65,8 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable int id, @RequestBody CategoryRequest CategoryRequest) {
-        Category mappedCategory = categoryMapper.categoryRequestToCategory(CategoryRequest);
+    public ResponseEntity<Category> updateCategory(@PathVariable int id, @RequestBody CategoryRequest categoryRequest) {
+        Category mappedCategory = categoryMapper.categoryRequestToCategory(categoryRequest);
         mappedCategory.setId(id);
         Category savedCategory = categoryService.create(mappedCategory);
         return ResponseEntity.created(URI.create("/categories/" + savedCategory.getId()))
