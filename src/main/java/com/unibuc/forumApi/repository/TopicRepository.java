@@ -2,6 +2,7 @@ package com.unibuc.forumApi.repository;
 
 import com.unibuc.forumApi.model.Topic;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -63,4 +64,36 @@ public class TopicRepository {
         }
     }
 
+    public Topic update(Topic topic) {
+        String updateSql = "update topic set " +
+                "name = :name," +
+                "description = :description," +
+                "user_id = :user_id," +
+                "category_id = :category_id " +
+                "where id = :id";
+
+        String insertSql = "insert into topic (name, description, user_id, category_id) "
+                + "values (:name, :description, :user_id, :category_id)";
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("id", topic.getId())
+                .addValue("name", topic.getName())
+                .addValue("description", topic.getDescription())
+                .addValue("user_id", topic.getUserId())
+                .addValue("category_id", topic.getCategoryId());
+
+        if(jdbcTemplate.update(updateSql, parameters) != 1) {
+            jdbcTemplate.update(insertSql, parameters);
+        }
+        return topic;
+    }
+
+    public void delete(int id) {
+        String sql = "delete from topic where id = :id";
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("id", id);
+
+        jdbcTemplate.update(sql, parameters);
+    }
 }

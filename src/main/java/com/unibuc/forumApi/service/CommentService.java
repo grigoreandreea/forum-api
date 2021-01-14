@@ -1,6 +1,7 @@
 package com.unibuc.forumApi.service;
 
 import com.unibuc.forumApi.model.Comment;
+import com.unibuc.forumApi.model.Topic;
 import com.unibuc.forumApi.repository.CommentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,5 +19,17 @@ public class CommentService {
 
     public Optional<Comment> getComment(int id) {
         return commentRepository.getComment(id);
+    }
+
+    public Comment create(Comment comment) {
+        return commentRepository.update(comment);
+    }
+
+    public Comment update(Comment comment) {
+        return commentRepository.update(comment);
+    }
+
+    public void removeComment(int id) {
+        commentRepository.delete(id);
     }
 }

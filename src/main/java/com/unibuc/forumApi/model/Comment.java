@@ -6,11 +6,22 @@ public class Comment {
     private int topicId;
     private int userId;
 
+    public Comment(String description, int userId) {
+        this.description = description;
+        this.userId = userId;
+    }
+
     public Comment() {
     }
 
     public Comment(int id, String description, int topicId, int userId) {
         this.id = id;
+        this.description = description;
+        this.topicId = topicId;
+        this.userId = userId;
+    }
+
+    public Comment(String description, int topicId, int userId) {
         this.description = description;
         this.topicId = topicId;
         this.userId = userId;

@@ -1,6 +1,7 @@
 package com.unibuc.forumApi.controller;
 
 import com.unibuc.forumApi.dto.*;
+import com.unibuc.forumApi.exception.CommentNotFoundException;
 import com.unibuc.forumApi.exception.TopicNotFoundException;
 import com.unibuc.forumApi.exception.UserNotFoundException;
 import com.unibuc.forumApi.mapper.*;
@@ -129,11 +130,12 @@ public class UserController {
         }
         Optional<Topic> topic = topicService.getTopic(idTopic);
         if(topic.isEmpty()) {
-            throw new TopicNotFoundException(id);
+            throw new TopicNotFoundException(idTopic);
         }
+
         Optional<List<Comment>> comments = topicService.getTopicComments(idTopic);
         if(comments.isEmpty()) {
-            return null;
+            throw new CommentNotFoundException(idComment);
         }
         return comments.get().stream().filter(comment -> comment.getId() == idComment).findFirst();
     }
@@ -164,7 +166,7 @@ public class UserController {
 
         Optional<List<Comment>> comments = userService.getUserComments(id);
         if(comments.isEmpty()) {
-            return null;
+            throw new CommentNotFoundException(idComment);
         }
 
         return comments.get().stream().filter(comment -> comment.getId() == idComment).findFirst();

@@ -2,6 +2,7 @@ package com.unibuc.forumApi.repository;
 
 import com.unibuc.forumApi.model.Comment;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -67,5 +68,35 @@ public class CommentRepository {
         } else {
             return Optional.empty();
         }
+    }
+
+    public Comment update(Comment comment) {
+        String updateSql = "update comment set " +
+                "description = :description," +
+                "topic_id = :topic_id," +
+                "user_id = :user_id " +
+                "where id = :id";
+
+        String insertSql = "insert into comment (description, topic_id, user_id) "
+                + "values (:description, :topic_id, :user_id)";
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("id", comment.getId())
+                .addValue("description", comment.getDescription())
+                .addValue("topic_id", comment.getTopicId())
+                .addValue("user_id", comment.getUserId());
+        if(jdbcTemplate.update(updateSql, parameters) != 1) {
+            jdbcTemplate.update(insertSql, parameters);
+        }
+        return comment;
+    }
+
+    public void delete(int id) {
+        String sql = "delete from comment where id = :id";
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("id", id);
+
+        jdbcTemplate.update(sql, parameters);
     }
 }

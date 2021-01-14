@@ -19,6 +19,13 @@ public class Topic {
         this.categoryId = categoryId;
     }
 
+    public Topic(String name, String description, int userId, int categoryId) {
+        this.name = name;
+        this.description = description;
+        this.userId = userId;
+        this.categoryId = categoryId;
+    }
+
     public int getId() {
         return id;
     }
@@ -59,4 +66,14 @@ public class Topic {
         this.categoryId = categoryId;
     }
 
+    @Override
+    public String toString() {
+        return "Topic{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", userId=" + userId +
+                ", categoryId=" + categoryId +
+                '}';
+    }
 }

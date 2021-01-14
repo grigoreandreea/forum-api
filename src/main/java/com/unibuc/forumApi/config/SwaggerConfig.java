@@ -15,7 +15,7 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.unibuc.ex1curs11.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.unibuc.forum-api.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());
@@ -24,8 +24,8 @@ public class SwaggerConfig {
     @Bean
     public ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Tourism Agency API Documentation")
-                .description("API Documentation for all available operations with destinations and holidays")
+                .title("Forum API Documentation")
+                .description("API Documentation for all available operations with topics and comments")
                 .build();
     }
 }

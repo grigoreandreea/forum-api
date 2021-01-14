@@ -84,13 +84,6 @@ public class UserRepository {
 
     private RowMapper<User> getUserRowMapper() {
         return (resultSet, rowNum) -> {
-/*            System.out.println("HERE:");
-            System.out.println(resultSet.getMetaData().getColumnCount());
-            int columnCount = resultSet.getMetaData().getColumnCount();
-
-            for (int i = 1; i <= columnCount; i++) {
-                System.out.println("column name: " + resultSet.getMetaData().getColumnName(i));
-            }*/
             return new User(
                     resultSet.getInt("id"),
                     resultSet.getString("username"),
