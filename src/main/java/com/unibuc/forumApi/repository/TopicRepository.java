@@ -38,6 +38,13 @@ public class TopicRepository {
         return getTopicsFromResultSet(jdbcTemplate.query(sql, mapper));
     }
 
+    public Optional<List<Topic>> getCategoryTopics(int categoryId) {
+        String sql = "select * from topic where category_id =" + categoryId;
+        RowMapper<Topic> mapper = getTopicRowMapper();
+
+        return getTopicsFromResultSet(jdbcTemplate.query(sql, mapper));
+    }
+
     private RowMapper<Topic> getTopicRowMapper() {
         return (resultSet, rowNum) -> new Topic(
                 resultSet.getInt("id"),
