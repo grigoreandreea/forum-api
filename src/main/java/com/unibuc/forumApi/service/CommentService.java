@@ -6,6 +6,7 @@ import com.unibuc.forumApi.repository.CommentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,6 +20,10 @@ public class CommentService {
 
     public Optional<Comment> getComment(int id) {
         return commentRepository.getComment(id);
+    }
+
+    public Optional<List<Comment>> getComments() {
+        return commentRepository.getComments();
     }
 
     public Comment create(Comment comment) {

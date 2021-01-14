@@ -25,7 +25,7 @@ public class SwaggerConfig {
     public ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Forum API Documentation")
-                .description("API Documentation for all available operations with topics and comments")
+                .description("API Documentation for all available operations with users,topics, categories of topics, comments and administration countries and cities.")
                 .build();
     }
 }
