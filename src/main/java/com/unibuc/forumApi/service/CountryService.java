@@ -1,6 +1,8 @@
 package com.unibuc.forumApi.service;
 
+import com.unibuc.forumApi.model.City;
 import com.unibuc.forumApi.model.Country;
+import com.unibuc.forumApi.repository.CityRepository;
 import com.unibuc.forumApi.repository.CountryRepository;
 import com.unibuc.forumApi.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -14,13 +16,16 @@ import java.util.Optional;
 public class CountryService {
     private CountryRepository countryRepository;
     private UserRepository userRepository;
+    private CityRepository cityRepository;
 
     public CountryService(
             CountryRepository countryRepository,
-            UserRepository userRepository
+            UserRepository userRepository,
+            CityRepository cityRepository
     ) {
         this.countryRepository = countryRepository;
         this.userRepository = userRepository;
+        this.cityRepository = cityRepository;
     }
 
     public Optional<Country> getCountry(int id) {
@@ -43,4 +48,7 @@ public class CountryService {
         countryRepository.delete(id);
     }
 
+    public Optional<List<City>> getCountryCities(int countryId) {
+        return cityRepository.getCountryCities(countryId);
+    }
 }

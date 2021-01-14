@@ -31,7 +31,7 @@ public class CityRepository {
         return getCitiesFromResultSet(jdbcTemplate.query(sql, mapper));
     }
 
-    private Optional<List<City>> getCountryCities(int countryId) {
+    public Optional<List<City>> getCountryCities(int countryId) {
         String sql = "select * from city where country_id =" + countryId;
         RowMapper<City> mapper = getCityRowMapper();
 
