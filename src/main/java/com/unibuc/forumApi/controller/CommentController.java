@@ -1,10 +1,8 @@
 package com.unibuc.forumApi.controller;
 
 import com.unibuc.forumApi.dto.CommentRequest;
-import com.unibuc.forumApi.dto.TopicRequest;
 import com.unibuc.forumApi.mapper.CommentMapper;
 import com.unibuc.forumApi.model.Comment;
-import com.unibuc.forumApi.model.Topic;
 import com.unibuc.forumApi.service.CommentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +40,6 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<Comment> createComment(@RequestBody CommentRequest commentRequest) {
         Comment mappedComment = commentMapper.commentRequestToComment(commentRequest);
-        System.out.println(mappedComment.toString());
         Comment savedComment = commentService.create(mappedComment);
         return ResponseEntity.created(URI.create("/comments/" + savedComment.getId()))
                 .body(savedComment);

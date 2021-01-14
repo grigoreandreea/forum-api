@@ -47,7 +47,7 @@ public class TopicController {
     }
 
     @PostMapping
-    public ResponseEntity<Topic> createUser(@RequestBody TopicRequest topicRequest) {
+    public ResponseEntity<Topic> createTopic(@RequestBody TopicRequest topicRequest) {
         Topic mappedTopic = topicMapper.topicRequestToTopic(topicRequest);
         System.out.println(mappedTopic.toString());
         Topic savedTopic = topicService.create(mappedTopic);
@@ -56,7 +56,7 @@ public class TopicController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Topic> updateUser(@PathVariable int id, @RequestBody TopicRequest topicRequest) {
+    public ResponseEntity<Topic> updateTopic(@PathVariable int id, @RequestBody TopicRequest topicRequest) {
         Topic mappedTopic = topicMapper.topicRequestToTopic(topicRequest);
         mappedTopic.setId(id);
         Topic savedTopic = topicService.update(mappedTopic);
