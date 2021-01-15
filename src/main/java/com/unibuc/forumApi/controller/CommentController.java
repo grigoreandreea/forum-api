@@ -4,6 +4,10 @@ import com.unibuc.forumApi.dto.CommentRequest;
 import com.unibuc.forumApi.mapper.CommentMapper;
 import com.unibuc.forumApi.model.Comment;
 import com.unibuc.forumApi.service.CommentService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +17,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/comments")
+@Api(value = "/comments",
+        tags = "Comments")
 public class CommentController {
     private final CommentService commentService;
     private final CommentMapper commentMapper;
@@ -38,6 +44,12 @@ public class CommentController {
     }
 
     @PostMapping
+    @ApiOperation(value = "Create a Comment",
+            notes = "Creates a new Comment based on the information received in the request")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "The Comment was successfully created based on the received request"),
+            @ApiResponse(code = 400, message = "Validation error on the received request")
+    })
     public ResponseEntity<Comment> createComment(@RequestBody CommentRequest commentRequest) {
         Comment mappedComment = commentMapper.commentRequestToComment(commentRequest);
         Comment savedComment = commentService.create(mappedComment);

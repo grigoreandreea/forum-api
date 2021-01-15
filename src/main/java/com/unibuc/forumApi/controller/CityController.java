@@ -4,6 +4,9 @@ import com.unibuc.forumApi.dto.CityRequest;
 import com.unibuc.forumApi.mapper.CityMapper;
 import com.unibuc.forumApi.model.City;
 import com.unibuc.forumApi.service.CityService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +37,12 @@ public class CityController {
     public Optional<City> getCity(@PathVariable int id) { return cityService.getCity(id); }
 
     @PostMapping
+    @ApiOperation(value = "Create a City",
+            notes = "Creates a new City based on the information received in the request")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "The City was successfully created based on the received request"),
+            @ApiResponse(code = 400, message = "Validation error on the received request")
+    })
     public ResponseEntity<City> createCity(@RequestBody CityRequest cityRequest) {
         City mappedCity = cityMapper.cityRequestToCity(cityRequest);
         City savedCity = cityService.create(mappedCity);

@@ -15,6 +15,9 @@ import com.unibuc.forumApi.service.CategoryService;
 import com.unibuc.forumApi.service.CommentService;
 import com.unibuc.forumApi.service.TopicService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,6 +60,12 @@ public class CategoryController {
     }
 
     @PostMapping
+    @ApiOperation(value = "Create a Category",
+            notes = "Creates a new Category based on the information received in the request")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "The Category was successfully created based on the received request"),
+            @ApiResponse(code = 400, message = "Validation error on the received request")
+    })
     public ResponseEntity<Category> createCategory(@RequestBody CategoryRequest categoryRequest) {
         Category mappedCategory = categoryMapper.categoryRequestToCategory(categoryRequest);
         Category savedCategory = categoryService.create(mappedCategory);

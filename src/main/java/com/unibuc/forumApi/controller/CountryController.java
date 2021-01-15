@@ -15,6 +15,9 @@ import com.unibuc.forumApi.model.Country;
 import com.unibuc.forumApi.model.Topic;
 import com.unibuc.forumApi.service.CityService;
 import com.unibuc.forumApi.service.CountryService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,6 +58,12 @@ public class CountryController {
     }
 
     @PostMapping
+    @ApiOperation(value = "Create a Country",
+            notes = "Creates a new Country based on the information received in the request")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "The Country was successfully created based on the received request"),
+            @ApiResponse(code = 400, message = "Validation error on the received request")
+    })
     public ResponseEntity<Country> createCountry(@RequestBody CountryRequest countryRequest) {
         Country mappedCountry = countryMapper.countryRequestToCountry(countryRequest);
         Country savedCountry = countryService.create(mappedCountry);

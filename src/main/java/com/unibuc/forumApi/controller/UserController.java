@@ -7,6 +7,9 @@ import com.unibuc.forumApi.exception.UserNotFoundException;
 import com.unibuc.forumApi.mapper.*;
 import com.unibuc.forumApi.model.*;
 import com.unibuc.forumApi.service.*;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,6 +49,12 @@ public class UserController {
     }
 
     @PostMapping
+    @ApiOperation(value = "Create a User",
+            notes = "Creates a new User based on the information received in the request")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "The User was successfully created based on the received request"),
+            @ApiResponse(code = 400, message = "Validation error on the received request")
+    })
     public ResponseEntity<User> createUser(@RequestBody UserRequest userRequest) {
         User mappedUser = userMapper.userRequestToUser(userRequest);
         User savedUser = userService.create(mappedUser);

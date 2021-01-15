@@ -1,18 +1,25 @@
 package com.unibuc.forumApi.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+@ApiModel(value = "Topic request", description = "Required details needed to create a new Topic")
 public class TopicRequest {
 
     @NotBlank
+    @ApiModelProperty(value = "name", required = true, notes = "The name of the Topic", example = "Cardio", position = 1)
     private String name;
     @NotBlank
+    @ApiModelProperty(value = "description", required = true, notes = "The description of the Topic", example = "The ultimate smartphone!!", position = 4)
     private String description;
     @NotNull
+    @ApiModelProperty(value = "userId", required = true, notes = "The id of the User", example = "1", position = 1)
     private int userId;
-
     @NotNull
+    @ApiModelProperty(value = "categoryId", required = true, notes = "The id of the Category", example = "1", position = 1)
     private int categoryId;
 
     public TopicRequest() {

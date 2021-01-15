@@ -7,6 +7,9 @@ import com.unibuc.forumApi.mapper.*;
 import com.unibuc.forumApi.model.Comment;
 import com.unibuc.forumApi.model.Topic;
 import com.unibuc.forumApi.service.*;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,6 +50,12 @@ public class TopicController {
     }
 
     @PostMapping
+    @ApiOperation(value = "Create a Topic",
+            notes = "Creates a new Topic based on the information received in the request")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "The Topic was successfully created based on the received request"),
+            @ApiResponse(code = 400, message = "Validation error on the received request")
+    })
     public ResponseEntity<Topic> createTopic(@RequestBody TopicRequest topicRequest) {
         Topic mappedTopic = topicMapper.topicRequestToTopic(topicRequest);
         Topic savedTopic = topicService.create(mappedTopic);
