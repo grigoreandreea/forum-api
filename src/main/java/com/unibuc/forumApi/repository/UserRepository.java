@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,14 @@ public class UserRepository {
         RowMapper<User> mapper = getUserRowMapper();
 
         return getUserFromResultSet(jdbcTemplate.query(sql, mapper));
+    }
+
+    public Optional<List<User>> getUsersByCompany(int companyId) {
+        String sql = "select u.id, u.username, u.date, u.gender, u.country_id, u.city_id " +
+                "from users u join user_works_on_company uwoc on u.id = uwoc.user_id " +
+                "where uwoc.company_id = " + companyId;
+        RowMapper<User> mapper = getUserRowMapper();
+        return getUsersFromResultSet(jdbcTemplate.query(sql, mapper));
     }
 
     public User update(User user) {
@@ -95,5 +104,27 @@ public class UserRepository {
         };
     }
 
+    public void deleteExistingUserEmployers(int id) {
+        String sql = "delete from user_works_on_company where user_id = :id";
 
+        MapSqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("id", id);
+
+        jdbcTemplate.update(sql, parameters);
+    }
+
+    public void saveUserEmployers(int userId, List<Integer> companies) {
+        String values = "";
+        for(int i = 0; i < companies.size(); i++) {
+            values += "( " + userId + ", " + companies.get(i) + " )";
+            if (i != companies.size() - 1) {
+                values += ",";
+            }
+        }
+
+        String insertSql = "insert into user_works_on_company (user_id, company_id) "
+                + "values " + values;
+
+        jdbcTemplate.update(insertSql, new MapSqlParameterSource());
+    }
 }

@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
+import java.util.List;
 
 @ApiModel(value = "User request", description = "Required details needed to create a new User")
 public class UserRequest {
@@ -25,6 +26,15 @@ public class UserRequest {
         this.username = username;
         this.countryId = countryId;
         this.cityId = cityId;
+    }
+
+    public UserRequest(@NotBlank String username, Date date, boolean gender, @NotNull int countryId, @NotNull int cityId, List<Integer> companies) {
+        this.username = username;
+        this.date = date;
+        this.gender = gender;
+        this.countryId = countryId;
+        this.cityId = cityId;
+        this.employers = companies;
     }
 
     public String getUsername() {
@@ -67,6 +77,14 @@ public class UserRequest {
         this.cityId = cityId;
     }
 
+    public List<Integer> getEmployers() {
+        return employers;
+    }
+
+    public void setEmployers(List<Integer> employers) {
+        this.employers = employers;
+    }
+
     @NotBlank
     @ApiModelProperty(value = "username", required = true, notes = "The username of the User", example = "Diana", position = 1)
     private String username;
@@ -80,4 +98,5 @@ public class UserRequest {
     @NotNull
     @ApiModelProperty(value = "cityId", required = true, notes = "The id of the City", example = "2", position = 1)
     private int cityId;
+    private List<Integer> employers;
 }
