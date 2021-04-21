@@ -2,6 +2,7 @@ package com.unibuc.forumApi.model;
 
 
 import java.sql.Date;
+import java.util.List;
 
 public class User {
 
@@ -11,8 +12,27 @@ public class User {
     private boolean gender;
     private int countryId;
     private int cityId;
+    private List<Company> employers;
 
     public User() {
+    }
+
+    public User(String username, Date date, boolean gender, int countryId, int cityId, List<Company> employers) {
+        this.username = username;
+        this.date = date;
+        this.gender = gender;
+        this.countryId = countryId;
+        this.cityId = cityId;
+        this.employers = employers;
+    }
+
+    public User(int id, String username, Date date, boolean gender, int countryId, int cityId) {
+        this.id = id;
+        this.username = username;
+        this.date = date;
+        this.gender = gender;
+        this.countryId = countryId;
+        this.cityId = cityId;
     }
 
     public User(String username, Date date, boolean gender, int countryId, int cityId) {
@@ -23,13 +43,12 @@ public class User {
         this.cityId = cityId;
     }
 
-    public User(int id, String username, Date date, boolean gender, int countryId, int cityId) {
+    public User(int id, String username, int countryId, int cityId, List<Company> employers) {
         this.id = id;
         this.username = username;
-        this.date = date;
-        this.gender = gender;
         this.countryId = countryId;
         this.cityId = cityId;
+        this.employers = employers;
     }
 
     public User(int id, String username, int countryId, int cityId) {
@@ -85,5 +104,13 @@ public class User {
 
     public void setCountryId(int countryId) {
         this.countryId = countryId;
+    }
+
+    public List<Company> getEmployers() {
+        return employers;
+    }
+
+    public void setEmployers(List<Company> employers) {
+        this.employers = employers;
     }
 }

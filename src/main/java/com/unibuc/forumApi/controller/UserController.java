@@ -67,6 +67,9 @@ public class UserController {
         User mappedUser = userMapper.userRequestToUser(userRequest);
         mappedUser.setId(id);
         User savedUser = userService.update(mappedUser);
+        if (userRequest.getEmployers() != null) {
+            this.userService.saveUserEmployers(savedUser.getId(), userRequest.getEmployers());
+        }
         return ResponseEntity.created(URI.create("/users/" + savedUser.getId()))
                 .body(savedUser);
     }
