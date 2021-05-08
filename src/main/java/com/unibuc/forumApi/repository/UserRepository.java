@@ -32,6 +32,13 @@ public class UserRepository {
         return getUserFromResultSet(jdbcTemplate.query(sql, mapper));
     }
 
+    public Optional<User> findByUsername(String username) {
+        String sql = "select * from users where username=" + username;
+        RowMapper<User> mapper = getUserRowMapper();
+
+        return getUserFromResultSet(jdbcTemplate.query(sql, mapper));
+    }
+
     public Optional<List<User>> getUsersByCompany(int companyId) {
         String sql = "select u.id, u.username, u.date, u.gender, u.country_id, u.city_id " +
                 "from users u join user_works_on_company uwoc on u.id = uwoc.user_id " +

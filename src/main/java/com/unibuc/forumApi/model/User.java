@@ -2,19 +2,42 @@ package com.unibuc.forumApi.model;
 
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class User {
 
     private int id;
     private String username;
+    private String password;
     private Date date;
     private boolean gender;
+    private boolean enabled;
     private int countryId;
     private int cityId;
     private List<Company> employers;
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
+    }
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+        this.gender = true;
+        this.countryId = 1;
+        this.cityId = 1;
+        this.enabled = true;
+    }
+
+    public User(String username, String password, Date date, boolean gender, int countryId, int cityId) {
+        this.username = username;
+        this.password = password;
+        this.date = date;
+        this.gender = gender;
+        this.countryId = countryId;
+        this.cityId = cityId;
     }
 
     public User(String username, Date date, boolean gender, int countryId, int cityId, List<Company> employers) {
@@ -112,5 +135,29 @@ public class User {
 
     public void setEmployers(List<Company> employers) {
         this.employers = employers;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }
