@@ -32,23 +32,19 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public String getUsernameFromToken(String token) {
-        System.out.println("getUsernameFromToken");
         return getClaimFromToken(token, Claims::getSubject);
     }
 
     public Date getExpirationDateFromToken(String token) {
-        System.out.println("getExpirationDateFromToken");
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
-        System.out.println("getClaimFromToken");
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        System.out.println("getAllClaimsFromToken");
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
@@ -58,7 +54,6 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public String generateToken(UserDetails userDetails) {
-        System.out.println("Alt generate token");
         Map<String, Object> claims = new HashMap<>();
         Optional<User> user = userService.getUserByUsername(userDetails.getUsername());
         if (user.isEmpty()) {
@@ -70,14 +65,12 @@ public class JwtTokenUtil implements Serializable {
     }
 
     private String doGenerateToken(Map<String, Object> claims, String subject) {
-        System.out.println("Generate token");
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
                 .signWith(SignatureAlgorithm.HS256, secret).compact();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
-        System.out.println("Validate token");
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }

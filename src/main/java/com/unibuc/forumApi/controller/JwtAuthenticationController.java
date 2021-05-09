@@ -14,13 +14,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.net.URI;
+import java.util.Optional;
 
 
 @RestController
@@ -50,18 +47,16 @@ public class JwtAuthenticationController {
                 .body(savedUser);
     }
 
+    @GetMapping("/userDetails")
+    public Optional<User> getUserDetails(String username) {
+        return service.getUserByUsername(username);
+    }
+
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-        System.out.println("Am ajuns pana aici...!");
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-        System.out.println("Am ajuns pana aici... 2!");
-
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        System.out.println("Am ajuns pana aici... 3!");
-
         final String token = jwtTokenUtil.generateToken(userDetails);
-        System.out.println("Am ajuns pana aici... 4!");
-
         return ResponseEntity.ok(new JwtResponse(token));
     }
 

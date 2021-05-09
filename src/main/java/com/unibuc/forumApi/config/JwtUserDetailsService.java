@@ -24,7 +24,6 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username){
         Optional<com.unibuc.forumApi.model.User> user = userRepository.findUserByName(username);
-        System.out.println(user.get().getPassword());
         if (user.isEmpty()) {
             throw new UsernameNotFoundException(username);
         }
