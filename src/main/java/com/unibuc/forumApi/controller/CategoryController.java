@@ -1,18 +1,17 @@
 package com.unibuc.forumApi.controller;
 
 
+import com.unibuc.forumApi.config.Pagination;
 import com.unibuc.forumApi.dto.TopicRequest;
 import com.unibuc.forumApi.dto.CategoryRequest;
 import com.unibuc.forumApi.dto.CategoryWithTopics;
 import com.unibuc.forumApi.exception.TopicNotFoundException;
 import com.unibuc.forumApi.exception.CategoryNotFoundException;
 import com.unibuc.forumApi.mapper.CategoryMapper;
-import com.unibuc.forumApi.mapper.CommentMapper;
 import com.unibuc.forumApi.mapper.TopicMapper;
 import com.unibuc.forumApi.model.Topic;
 import com.unibuc.forumApi.model.Category;
 import com.unibuc.forumApi.service.CategoryService;
-import com.unibuc.forumApi.service.CommentService;
 import com.unibuc.forumApi.service.TopicService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,8 +49,9 @@ public class CategoryController {
 
     @GetMapping
     @ResponseBody
-    public Optional<List<Category>> getCategories() {
-        return categoryService.getCategories();
+    public List<Category> getCategories(Integer page, Integer size, String sort) {
+        return new Pagination<>(categoryService.getCategories(), page, size, sort)
+                .paginate(Comparator.comparing(Category::getName));
     }
 
     @GetMapping("/{id}")

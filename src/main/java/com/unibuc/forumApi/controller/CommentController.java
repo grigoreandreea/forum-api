@@ -1,8 +1,10 @@
 package com.unibuc.forumApi.controller;
 
+import com.unibuc.forumApi.config.Pagination;
 import com.unibuc.forumApi.dto.CommentRequest;
 import com.unibuc.forumApi.mapper.CommentMapper;
 import com.unibuc.forumApi.model.Comment;
+import com.unibuc.forumApi.model.Topic;
 import com.unibuc.forumApi.service.CommentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,8 +36,9 @@ public class CommentController {
 
     @GetMapping
     @ResponseBody
-    public Optional<List<Comment>> getComments() {
-        return commentService.getComments();
+    public List<Comment> getComments(Integer page, Integer size, String sort) {
+        return new Pagination<>(commentService.getComments(), page, size, sort)
+                .paginate(Comparator.comparing(Comment::getDescription));
     }
 
     @GetMapping("/{id}")

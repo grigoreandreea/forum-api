@@ -1,5 +1,6 @@
 package com.unibuc.forumApi.controller;
 
+import com.unibuc.forumApi.config.Pagination;
 import com.unibuc.forumApi.dto.*;
 import com.unibuc.forumApi.exception.CommentNotFoundException;
 import com.unibuc.forumApi.exception.TopicNotFoundException;
@@ -14,8 +15,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/topics")
@@ -39,8 +44,9 @@ public class TopicController {
 
     @GetMapping
     @ResponseBody
-    public Optional<List<Topic>> getTopic() {
-        return topicService.getTopics();
+    public List<Topic> getTopic(Integer page, Integer size, String sort) {
+        return new Pagination<>(topicService.getTopics(), page, size, sort)
+                .paginate(Comparator.comparing(Topic::getName));
     }
 
     @GetMapping("/{id}")

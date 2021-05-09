@@ -1,5 +1,6 @@
 package com.unibuc.forumApi.controller;
 
+import com.unibuc.forumApi.config.Pagination;
 import com.unibuc.forumApi.dto.*;
 import com.unibuc.forumApi.exception.CommentNotFoundException;
 import com.unibuc.forumApi.exception.TopicNotFoundException;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,8 +40,9 @@ public class UserController {
 
     @GetMapping
     @ResponseBody
-    public Optional<List<User>> getUsers() {
-        return userService.getUsers();
+    public List<User> getUsers(Integer page, Integer size, String sort) {
+        return new Pagination<>(userService.getUsers(), page, size, sort)
+                .paginate(Comparator.comparing(User::getUsername));
     }
 
     @GetMapping("/{id}")

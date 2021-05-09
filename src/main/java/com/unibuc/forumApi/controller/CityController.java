@@ -1,5 +1,6 @@
 package com.unibuc.forumApi.controller;
 
+import com.unibuc.forumApi.config.Pagination;
 import com.unibuc.forumApi.dto.CityRequest;
 import com.unibuc.forumApi.mapper.CityMapper;
 import com.unibuc.forumApi.model.City;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +32,10 @@ public class CityController {
 
     @GetMapping
     @ResponseBody
-    public Optional<List<City>> getCities() { return cityService.getCities(); }
+    public List<City> getCities(Integer page, Integer size, String sort) {
+        return new Pagination<>(cityService.getCities(), page, size, sort)
+                .paginate(Comparator.comparing(City::getName));
+    }
 
     @GetMapping("/{id}")
     @ResponseBody
