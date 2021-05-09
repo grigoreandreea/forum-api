@@ -15,12 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/topics")
@@ -29,6 +27,7 @@ public class TopicController {
     private final TopicMapper topicMapper;
     private final CommentMapper commentMapper;
     private final CommentService commentService;
+    private static final Logger logger = Logger.getLogger(TopicController.class.getName());
 
     public TopicController(
             TopicService topicService,
@@ -45,6 +44,7 @@ public class TopicController {
     @GetMapping
     @ResponseBody
     public List<Topic> getTopic(Integer page, Integer size, String sort) {
+        logger.info("Getting topics...");
         return new Pagination<>(topicService.getTopics(), page, size, sort)
                 .paginate(Comparator.comparing(Topic::getName));
     }
@@ -52,6 +52,7 @@ public class TopicController {
     @GetMapping("/{id}")
     @ResponseBody
     public Optional<Topic> getTopic(@PathVariable int id) {
+        logger.info("Getting topic with id: " + id + "...");
         return topicService.getTopic(id);
     }
 
@@ -71,6 +72,7 @@ public class TopicController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Topic> updateTopic(@PathVariable int id, @RequestBody TopicRequest topicRequest) {
+        logger.warning("Topic with id " + id + " might not exist...");
         Topic mappedTopic = topicMapper.topicRequestToTopic(topicRequest);
         mappedTopic.setId(id);
         Topic savedTopic = topicService.create(mappedTopic);
@@ -80,6 +82,7 @@ public class TopicController {
 
     @DeleteMapping("/{id}")
     public void removeTopic(@PathVariable int id) {
+        logger.warning("Topic with id " + id + " might not exist...");
         topicService.removeTopic(id);
     }
 

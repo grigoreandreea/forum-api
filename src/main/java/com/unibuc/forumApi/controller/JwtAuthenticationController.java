@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 @RestController
@@ -29,6 +31,7 @@ public class JwtAuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
     private final JwtUserDetailsService userDetailsService;
+    private static final Logger logger = Logger.getLogger(UserController.class.getName());
 
     public JwtAuthenticationController(UserService service, UserMapper mapper, AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, JwtUserDetailsService userDetailsService) {
         this.service = service;
@@ -64,8 +67,10 @@ public class JwtAuthenticationController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
+            logger.log(Level.SEVERE, "User disabled", e);
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
+            logger.log(Level.SEVERE, "Invalid credentials", e);
             throw new Exception("INVALID_CREDENTIALS", e);
         }
     }

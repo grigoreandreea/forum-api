@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @RestController
@@ -27,6 +28,7 @@ public class UserController {
     private final UserService userService;
     private final TopicService topicService;
     private final UserMapper userMapper;
+    private static final Logger logger = Logger.getLogger(UserController.class.getName());
 
     public UserController(
             UserService userService,
@@ -41,6 +43,7 @@ public class UserController {
     @GetMapping
     @ResponseBody
     public List<User> getUsers(Integer page, Integer size, String sort) {
+        logger.info("Getting users...");
         return new Pagination<>(userService.getUsers(), page, size, sort)
                 .paginate(Comparator.comparing(User::getUsername));
     }
@@ -48,6 +51,7 @@ public class UserController {
     @GetMapping("/{id}")
     @ResponseBody
     public Optional<User> getUser(@PathVariable int id) {
+        logger.info("Getting user with id: " + id + "...");
         return userService.getUser(id);
     }
 
@@ -67,6 +71,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody UserRequest userRequest) {
+        logger.warning("User with id " + id + " might not exist...");
         User mappedUser = userMapper.userRequestToUser(userRequest);
         mappedUser.setId(id);
         User savedUser = userService.update(mappedUser);
@@ -79,6 +84,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public void removeUser(@PathVariable int id) {
+        logger.warning("User with id " + id + " might not exist...");
         userService.removeUser(id);
     }
 
