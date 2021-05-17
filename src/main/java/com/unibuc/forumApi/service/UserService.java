@@ -61,6 +61,10 @@ public class UserService {
         if (user.isEmpty()) {
             throw new UserNotFoundException(1);
         }
+        Optional<List<Company>> employers = companyRepository.getCompaniesByUser(user.get().getId());
+        if (employers.isPresent()) {
+            user.get().setEmployers(employers.get());
+        }
         return user;
     }
 
@@ -71,6 +75,8 @@ public class UserService {
     }
 
     public User update(User user) {
+        String hashedPassword = this.passwordEncoder.encode(user.getPassword());
+        user.setPassword(hashedPassword);
         return userRepository.update(user);
     }
 

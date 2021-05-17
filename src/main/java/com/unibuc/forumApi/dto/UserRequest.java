@@ -20,6 +20,14 @@ public class UserRequest {
         this.cityId = cityId;
     }
 
+    public UserRequest(@NotBlank String username, @NotBlank String password, @NotNull int countryId, @NotNull int cityId, List<Integer> employers) {
+        this.username = username;
+        this.password = password;
+        this.countryId = countryId;
+        this.cityId = cityId;
+        this.employers = employers;
+    }
+
     public String getUsername() {
         return username;
     }
