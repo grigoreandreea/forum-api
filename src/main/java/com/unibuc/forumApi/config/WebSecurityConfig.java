@@ -2,6 +2,7 @@ package com.unibuc.forumApi.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -58,7 +59,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.cors()
                 .and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/authenticate", "/register", "/registerConfirmation/**", "/interview/email/**", "/candidate/**", "/interviewer/getInterviewer/**").permitAll()
+                .antMatchers("/authenticate", "/register").permitAll()
+                .antMatchers( HttpMethod.GET, "/users", "/countries", "/categories",  "/companies",  "/cities").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
