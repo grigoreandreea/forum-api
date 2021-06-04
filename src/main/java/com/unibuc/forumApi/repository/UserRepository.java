@@ -32,6 +32,13 @@ public class UserRepository {
         return getUserFromResultSet(jdbcTemplate.query(sql, mapper));
     }
 
+    public Optional<User> findUserByName(String username) {
+        String sql = "select * from users where username='" + username + "';";
+        RowMapper<User> mapper = getUserRowMapper();
+
+        return getUserFromResultSet(jdbcTemplate.query(sql, mapper));
+    }
+
     public Optional<List<User>> getUsersByCompany(int companyId) {
         String sql = "select u.id, u.username, u.date, u.gender, u.country_id, u.city_id " +
                 "from users u join user_works_on_company uwoc on u.id = uwoc.user_id " +
@@ -43,18 +50,20 @@ public class UserRepository {
     public User update(User user) {
         String updateSql = "update users set "
                 + "username = :username, "
+                + "password = :password, "
                 + "date = :date, "
                 + "gender = :gender, "
                 + "country_id = :country_id,"
                 + "city_id = :city_id "
                 + "where id = :id";
 
-        String insertSql = "insert into users (username, date, gender, country_id, city_id) "
-                + "values (:username, :date, :gender, :country_id, :city_id) ";
+        String insertSql = "insert into users (username, password, date, gender, country_id, city_id) "
+                + "values (:username, :password, :date, :gender, :country_id, :city_id) ";
 
         MapSqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("id", user.getId())
                 .addValue("username", user.getUsername())
+                .addValue("password", user.getPassword())
                 .addValue("date", user.getDate())
                 .addValue("gender", user.isGender())
                 .addValue("country_id", user.getCountryId())
@@ -96,6 +105,7 @@ public class UserRepository {
             return new User(
                     resultSet.getInt("id"),
                     resultSet.getString("username"),
+                    resultSet.getString("password"),
                     resultSet.getDate("date"),
                     resultSet.getBoolean("gender"),
                     resultSet.getInt("country_id"),

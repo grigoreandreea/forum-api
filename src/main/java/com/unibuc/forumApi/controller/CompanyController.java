@@ -1,5 +1,6 @@
 package com.unibuc.forumApi.controller;
 
+import com.unibuc.forumApi.config.Pagination;
 import com.unibuc.forumApi.dto.CompanyRequest;
 import com.unibuc.forumApi.mapper.CompanyMapper;
 import com.unibuc.forumApi.model.Company;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,8 +37,9 @@ public class CompanyController {
 
     @GetMapping
     @ResponseBody
-    public Optional<List<Company>> getCompanies() {
-        return companyService.getCompanies();
+    public List<Company> getCompanies(Integer page, Integer size, String sort) {
+        return new Pagination<>(companyService.getCompanies(), page, size, sort)
+                .paginate(Comparator.comparing(Company::getName));
     }
 
     @PostMapping

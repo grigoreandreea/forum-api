@@ -14,27 +14,18 @@ public class UserRequest {
     public UserRequest() {
     }
 
-    public UserRequest(String username, Date date, boolean gender, int countryId, int cityId) {
-        this.username = username;
-        this.date = date;
-        this.gender = gender;
-        this.countryId = countryId;
-        this.cityId = cityId;
-    }
-
     public UserRequest(String username, int countryId, int cityId) {
         this.username = username;
         this.countryId = countryId;
         this.cityId = cityId;
     }
 
-    public UserRequest(@NotBlank String username, Date date, boolean gender, @NotNull int countryId, @NotNull int cityId, List<Integer> companies) {
+    public UserRequest(@NotBlank String username, @NotBlank String password, @NotNull int countryId, @NotNull int cityId, List<Integer> employers) {
         this.username = username;
-        this.date = date;
-        this.gender = gender;
+        this.password = password;
         this.countryId = countryId;
         this.cityId = cityId;
-        this.employers = companies;
+        this.employers = employers;
     }
 
     public String getUsername() {
@@ -85,9 +76,20 @@ public class UserRequest {
         this.employers = employers;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @NotBlank
     @ApiModelProperty(value = "username", required = true, notes = "The username of the User", example = "Diana", position = 1)
     private String username;
+    @NotBlank
+    @ApiModelProperty(value = "password", required = true, notes = "The password of the User", example = "password", position = 1)
+    private String password;
     @ApiModelProperty(value = "date", required = false, notes = "The date of birth of the User", example = "1993-05-05", position = 1)
     private Date date;
     @ApiModelProperty(value = "gender", required = false, notes = "The gender of the User. (0-male, 1-female)", example = "1", position = 1)

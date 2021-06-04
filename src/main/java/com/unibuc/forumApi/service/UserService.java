@@ -1,6 +1,5 @@
 package com.unibuc.forumApi.service;
 
-import com.unibuc.forumApi.dto.CompanyRequest;
 import com.unibuc.forumApi.exception.UserNotFoundException;
 import com.unibuc.forumApi.model.Comment;
 import com.unibuc.forumApi.model.Company;
@@ -10,6 +9,8 @@ import com.unibuc.forumApi.repository.CommentRepository;
 import com.unibuc.forumApi.repository.CompanyRepository;
 import com.unibuc.forumApi.repository.TopicRepository;
 import com.unibuc.forumApi.repository.UserRepository;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,17 +24,20 @@ public class UserService {
     private TopicRepository topicRepository;
     private CommentRepository commentRepository;
     private CompanyRepository companyRepository;
+    private PasswordEncoder passwordEncoder;
 
     public UserService(
             UserRepository userRepository,
             TopicRepository topicRepository,
             CommentRepository commentRepository,
-            CompanyRepository companyRepository
+            CompanyRepository companyRepository,
+            @Lazy PasswordEncoder passwordEncoder
     ) {
         this.userRepository = userRepository;
         this.topicRepository = topicRepository;
         this.commentRepository = commentRepository;
         this.companyRepository = companyRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Optional<List<User>> getUsers() {
@@ -52,11 +56,27 @@ public class UserService {
         return user;
     }
 
+    public Optional<User> getUserByUsername(String username) {
+        Optional<User> user = userRepository.findUserByName(username);
+        if (user.isEmpty()) {
+            throw new UserNotFoundException(1);
+        }
+        Optional<List<Company>> employers = companyRepository.getCompaniesByUser(user.get().getId());
+        if (employers.isPresent()) {
+            user.get().setEmployers(employers.get());
+        }
+        return user;
+    }
+
     public User create(User user) {
+        String hashedPassword = this.passwordEncoder.encode(user.getPassword());
+        user.setPassword(hashedPassword);
         return userRepository.update(user);
     }
 
     public User update(User user) {
+        String hashedPassword = this.passwordEncoder.encode(user.getPassword());
+        user.setPassword(hashedPassword);
         return userRepository.update(user);
     }
 

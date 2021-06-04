@@ -1,18 +1,15 @@
 package com.unibuc.forumApi.controller;
 
+import com.unibuc.forumApi.config.Pagination;
 import com.unibuc.forumApi.dto.CityRequest;
-import com.unibuc.forumApi.dto.CommentRequest;
 import com.unibuc.forumApi.dto.CountryRequest;
 import com.unibuc.forumApi.dto.CountryWithCities;
 import com.unibuc.forumApi.exception.CityNotFoundException;
 import com.unibuc.forumApi.exception.CountryNotFoundException;
-import com.unibuc.forumApi.exception.TopicNotFoundException;
 import com.unibuc.forumApi.mapper.CityMapper;
 import com.unibuc.forumApi.mapper.CountryMapper;
 import com.unibuc.forumApi.model.City;
-import com.unibuc.forumApi.model.Comment;
 import com.unibuc.forumApi.model.Country;
-import com.unibuc.forumApi.model.Topic;
 import com.unibuc.forumApi.service.CityService;
 import com.unibuc.forumApi.service.CountryService;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,8 +45,9 @@ public class CountryController {
 
     @GetMapping
     @ResponseBody
-    public Optional<List<Country>> getCountries() {
-        return countryService.getCountries();
+    public List<Country> getCountries(Integer page, Integer size, String sort) {
+        return new Pagination<>(countryService.getCountries(), page, size, sort)
+                .paginate(Comparator.comparing(Country::getName));
     }
 
     @GetMapping("/{id}")
